@@ -2,10 +2,13 @@ package com.collect.rxnerds;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.TimeUtils;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -31,12 +34,40 @@ import io.reactivex.rxjava3.subjects.ReplaySubject;
 public class MainActivity extends AppCompatActivity {
 
 	private static final String TAG = "MainActivity";
-
+	PostViewModel postViewModel;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		RecyclerView recyclerView = findViewById(R.id.recycler);
+		final PostsAdapter adapter = new PostsAdapter();
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		recyclerView.setAdapter(adapter);
 
+		postViewModel.postsMutableLiveData.observe(this, new Observer<List<PostModel>>() {
+			@Override
+			public void onSubscribe(@NonNull Disposable d) {
+
+			}
+			@Override
+			public void onNext(@NonNull List<PostModel> postModels) {
+
+			}
+			@Override
+			public void onError(@NonNull Throwable e) {
+				Log.d(TAG, "onError: "+e);
+			}
+
+			@Override
+			public void onComplete() {
+
+			}
+
+			@Override
+			public void onChanged(List<PostModel> postModels) {
+				adapter.setList(postModels);
+			}
+		});
 //		Observable();
 //		Observer();
 
